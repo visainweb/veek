@@ -15,8 +15,9 @@ Organizador de proyectos y tareas para equipos, al estilo de Asana, Monday o Cli
 ## Puesta en marcha
 
 1. Crea un proyecto gratuito en [supabase.com](https://supabase.com).
-2. En el **SQL Editor** de Supabase, ejecuta el contenido de
-   `supabase/migrations/20261127000000_init.sql`.
+2. En el **SQL Editor** de Supabase, ejecuta en orden el contenido de
+   `supabase/migrations/20261127000000_init.sql` y luego
+   `supabase/migrations/20261127010000_grants.sql`.
    (O con la CLI: `supabase link` y luego `supabase db push`.)
 3. Copia `.env.example` a `.env.local` y completa `NEXT_PUBLIC_SUPABASE_URL` y
    `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Project Settings > API).

@@ -15,6 +15,8 @@ async function LoginPageContent(props: { searchParams: PageProps<"/login">["sear
   const isSignup = params.mode === "signup";
   const error = typeof params.error === "string" ? params.error : null;
   const message = typeof params.message === "string" ? params.message : null;
+  // Enlace de invitación: /login?mode=signup&email=...
+  const invitedEmail = typeof params.email === "string" ? params.email : undefined;
 
   return (
     <main className="flex min-h-full flex-1 items-center justify-center bg-zinc-50 px-4 py-12">
@@ -33,7 +35,7 @@ async function LoginPageContent(props: { searchParams: PageProps<"/login">["sear
           {isSignup && (
             <Field label="Nombre" name="full_name" type="text" autoComplete="name" />
           )}
-          <Field label="Correo" name="email" type="email" autoComplete="email" />
+          <Field label="Correo" name="email" type="email" autoComplete="email" defaultValue={invitedEmail} />
           <Field
             label="Contraseña"
             name="password"

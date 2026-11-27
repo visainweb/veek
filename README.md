@@ -4,7 +4,9 @@ Organizador de proyectos y tareas para equipos, al estilo de Asana, Monday o Cli
 
 - Organizaciones con roles: propietario, administrador, miembro e invitado.
 - Proyectos con tablero kanban, tareas asignadas por usuario y estado (pendiente, en proceso, finalizada).
-- Calendario, carpetas y adjuntos por tarea (en desarrollo).
+- Detalle de tarea para editarla o eliminarla, y calendario con arrastrar para cambiar fechas.
+- Miembros: invitar por correo, cambiar roles y quitar personas.
+- Carpetas y adjuntos por tarea (en desarrollo).
 - Pensado para empaquetarse como app de Android e iPhone con Capacitor.
 
 ## Stack
@@ -16,8 +18,9 @@ Organizador de proyectos y tareas para equipos, al estilo de Asana, Monday o Cli
 
 1. Crea un proyecto gratuito en [supabase.com](https://supabase.com).
 2. En el **SQL Editor** de Supabase, ejecuta en orden el contenido de
-   `supabase/migrations/20261127000000_init.sql` y luego
-   `supabase/migrations/20261127010000_grants.sql`.
+   el contenido de cada archivo de `supabase/migrations/`:
+   `20261127000000_init.sql`, `20261127010000_grants.sql` y
+   `20261128000000_members.sql`.
    (O con la CLI: `supabase link` y luego `supabase db push`.)
 3. Copia `.env.example` a `.env.local` y completa `NEXT_PUBLIC_SUPABASE_URL` y
    `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Project Settings > API).
@@ -43,7 +46,10 @@ src/
     (app)/dashboard     Lista de proyectos
     (app)/projects/[id] Tablero del proyecto
     (app)/my-tasks      Tareas asignadas a mí
-    (app)/calendar      Calendario (próxima fase)
+    (app)/calendar      Calendario de tareas (FullCalendar)
+    (app)/members       Miembros, invitaciones y roles
+    actions             Server Actions de tareas y miembros
+  components            Tablero, detalle de tarea, calendario, controles de miembros
   lib/supabase          Clientes de Supabase (navegador, servidor, proxy)
   proxy.ts              Refresca la sesión y protege rutas
 supabase/migrations     Esquema de base de datos, roles y políticas
@@ -62,6 +68,7 @@ supabase/migrations     Esquema de base de datos, roles y políticas
 | `task_folders` | Carpetas dentro de una tarea (anidables) |
 | `task_attachments` | Archivos adjuntos (bucket privado `attachments`) |
 | `task_comments` | Comentarios en tareas |
+| `organization_invitations` | Invitaciones pendientes por correo (se aceptan solas al registrarse) |
 
 ### Permisos por rol
 
@@ -71,6 +78,7 @@ supabase/migrations     Esquema de base de datos, roles y políticas
 | Comentar | ✓ | ✓ | ✓ | ✓ |
 | Crear y editar tareas, carpetas, adjuntos | ✓ | ✓ | ✓ | |
 | Crear proyectos | ✓ | ✓ | ✓ | |
+| Borrar tareas de otros | ✓ | ✓ | | |
 | Borrar proyectos, gestionar miembros | ✓ | ✓ | | |
 | Borrar la organización, nombrar propietarios | ✓ | | | |
 
@@ -78,8 +86,9 @@ supabase/migrations     Esquema de base de datos, roles y políticas
 
 1. ✅ Base del proyecto, autenticación, organizaciones y roles
 2. ✅ Proyectos y tablero básico
-3. ⬜ Arrastrar y soltar en el tablero, detalle de tarea
-4. ⬜ Calendario y vista "Mis tareas" mejorada
-5. ⬜ Carpetas y adjuntos dentro de las tareas
-6. ⬜ Invitar miembros y gestionar roles
-7. ⬜ PWA y apps Android / iPhone con Capacitor
+3. ✅ Detalle de tarea: editar y eliminar
+4. ✅ Calendario
+5. ✅ Invitar miembros y gestionar roles
+6. ⬜ Arrastrar y soltar en el tablero
+7. ⬜ Carpetas y adjuntos dentro de las tareas
+8. ⬜ PWA y apps Android / iPhone con Capacitor

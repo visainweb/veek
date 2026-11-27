@@ -6,6 +6,7 @@ const NAV = [
   { href: "/dashboard", label: "Inicio" },
   { href: "/my-tasks", label: "Mis tareas" },
   { href: "/calendar", label: "Calendario" },
+  { href: "/members", label: "Miembros" },
 ];
 
 export function Sidebar({

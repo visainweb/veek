@@ -23,6 +23,13 @@ export default function OnboardingPage(props: PageProps<"/onboarding">) {
 async function OnboardingPageContent(props: { searchParams: PageProps<"/onboarding">["searchParams"] }) {
   const { error } = await props.searchParams;
 
+  // Si ya pertenece a una organización, no crear otra
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("organization_members")
+    .select("org_id", { count: "exact", head: true });
+  if (count && count > 0) redirect("/dashboard");
+
   return (
     <main className="flex min-h-full flex-1 items-center justify-center bg-zinc-50 px-4 py-12">
       <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">

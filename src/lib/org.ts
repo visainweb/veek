@@ -10,7 +10,7 @@ export async function requireOrg() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: membership } = await supabase
+  const { data: membership, error } = await supabase
     .from("organization_members")
     .select("role, organizations(id, name)")
     .eq("user_id", user.id)
@@ -18,6 +18,9 @@ export async function requireOrg() {
     .limit(1)
     .maybeSingle();
 
+  // Un error de permisos no debe confundirse con "no tiene organización":
+  // eso devolvía al usuario a /onboarding una y otra vez.
+  if (error) throw new Error(`No se pudo cargar tu organización: ${error.message}`);
   if (!membership?.organizations) redirect("/onboarding");
 
   return {

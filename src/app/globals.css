@@ -21,3 +21,53 @@ body {
     @apply inline-flex items-center justify-center rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-dark disabled:opacity-50;
   }
 }
+
+/* Calendario (FullCalendar) con los colores de Veek */
+.veek-calendar {
+  --fc-button-bg-color: #ffffff;
+  --fc-button-border-color: #d4d4d8;
+  --fc-button-text-color: #3f3f46;
+  --fc-button-hover-bg-color: #f4f4f5;
+  --fc-button-hover-border-color: #d4d4d8;
+  --fc-button-active-bg-color: #18181b;
+  --fc-button-active-border-color: #18181b;
+  --fc-today-bg-color: rgb(240 106 106 / 0.08);
+  --fc-border-color: #e4e4e7;
+  font-size: 0.875rem;
+}
+
+.veek-calendar .fc-button {
+  font-size: 0.8125rem;
+  text-transform: capitalize;
+  box-shadow: none !important;
+}
+
+.veek-calendar .fc-button-active {
+  color: #ffffff !important;
+}
+
+.veek-calendar .fc-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.veek-calendar .fc-toolbar-title::first-letter {
+  text-transform: uppercase;
+}
+
+.veek-calendar .fc-event {
+  cursor: pointer;
+  padding: 1px 4px;
+}
+
+.veek-calendar .veek-task-done {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+@media (max-width: 640px) {
+  .veek-calendar .fc-header-toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

@@ -34,7 +34,26 @@ export interface Task {
   start_date: string | null;
   due_date: string | null;
   position: number;
+  created_by: string | null;
 }
+
+/** Persona de la organización que puede ser responsable de una tarea. */
+export interface Person {
+  id: string;
+  name: string;
+}
+
+export const PRIORITY_LABELS: Record<TaskPriority, string> = {
+  low: "Baja",
+  medium: "Media",
+  high: "Alta",
+};
+
+export const STATUS_STYLES: Record<TaskStatus, string> = {
+  pending: "bg-zinc-100 text-zinc-600",
+  in_progress: "bg-amber-100 text-amber-800",
+  done: "bg-emerald-100 text-emerald-800",
+};
 
 export const ROLE_LABELS: Record<OrgRole, string> = {
   owner: "Propietario",

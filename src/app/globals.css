@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-brand: #f06a6a;
+  --color-brand-dark: #e04f4f;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: #ffffff;
+  color: #18181b;
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-dark disabled:opacity-50;
+  }
+}

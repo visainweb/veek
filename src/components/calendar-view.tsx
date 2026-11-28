@@ -31,7 +31,8 @@ export function CalendarView({
   people: Person[];
   permissions: TaskPermissions;
 }) {
-  const [onlyMine, setOnlyMine] = useState(false);
+  // "" = todas, "none" = sin responsable, o el id de un miembro
+  const [personId, setPersonId] = useState("");
   const [projectId, setProjectId] = useState("");
   const [hideDone, setHideDone] = useState(false);
   const [openTaskId, setOpenTaskId] = useState<string | null>(null);
@@ -43,7 +44,7 @@ export function CalendarView({
 
   const events = useMemo<EventInput[]>(() => {
     return tasks
-      .filter((t) => !onlyMine || t.assignee_id === permissions.userId)
+      .filter((t) => !personId || (personId === "none" ? !t.assignee_id : t.assignee_id === personId))
       .filter((t) => !projectId || t.project_id === projectId)
       .filter((t) => !hideDone || t.status !== "done")
       .map((t) => {
@@ -62,7 +63,7 @@ export function CalendarView({
           classNames: t.status === "done" ? ["veek-task-done"] : [],
         };
       });
-  }, [tasks, onlyMine, projectId, hideDone, permissions.userId, projectById]);
+  }, [tasks, personId, projectId, hideDone, projectById]);
 
   async function handleChange(arg: EventChangeArg) {
     const task = tasks.find((t) => t.id === arg.event.id);
@@ -85,20 +86,21 @@ export function CalendarView({
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
       <div className="flex flex-wrap items-center gap-3 text-sm">
-        <div className="inline-flex rounded-lg border border-zinc-300 bg-white p-0.5">
-          <button
-            onClick={() => setOnlyMine(false)}
-            className={`rounded-md px-3 py-1 ${!onlyMine ? "bg-zinc-900 text-white" : "text-zinc-600"}`}
-          >
-            Todas
-          </button>
-          <button
-            onClick={() => setOnlyMine(true)}
-            className={`rounded-md px-3 py-1 ${onlyMine ? "bg-zinc-900 text-white" : "text-zinc-600"}`}
-          >
-            Mis tareas
-          </button>
-        </div>
+        <select
+          value={personId}
+          onChange={(e) => setPersonId(e.target.value)}
+          className="input w-auto"
+          aria-label="Persona"
+        >
+          <option value="">Todas las personas</option>
+          <option value={permissions.userId}>Mis tareas</option>
+          {people
+            .filter((p) => p.id !== permissions.userId)
+            .map((p) => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          <option value="none">Sin responsable</option>
+        </select>
         <select
           value={projectId}
           onChange={(e) => setProjectId(e.target.value)}

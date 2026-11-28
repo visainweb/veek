@@ -124,3 +124,46 @@ export async function updateTaskDates(
   refresh();
   return { ok: true };
 }
+
+/** Mueve una tarea a otra columna o posición (arrastrar en el tablero). */
+export async function moveTask(taskId: string, columnId: string, position: number): Promise<ActionResult> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("tasks")
+    .update({ column_id: columnId, position })
+    .eq("id", taskId)
+    .select("id");
+  if (error) return { ok: false, error: error.message };
+  if (!data?.length) return { ok: false, error: "No tienes permiso para mover esta tarea" };
+  refresh();
+  return { ok: true };
+}
+
+/** Crea una tarea desde el tablero y devuelve el resultado (sin lanzar errores). */
+export async function quickCreateTask(input: {
+  projectId: string;
+  columnId: string;
+  title: string;
+  assigneeId: string | null;
+  dueDate: string | null;
+  position: number;
+}): Promise<ActionResult> {
+  const title = input.title.trim();
+  if (!title) return { ok: false, error: "Escribe un título" };
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { error } = await supabase.from("tasks").insert({
+    project_id: input.projectId,
+    column_id: input.columnId,
+    title,
+    created_by: user?.id,
+    assignee_id: input.assigneeId,
+    due_date: input.dueDate,
+    position: input.position,
+  });
+  if (error) return { ok: false, error: error.message };
+  refresh();
+  return { ok: true };
+}
